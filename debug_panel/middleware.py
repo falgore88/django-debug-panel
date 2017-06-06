@@ -63,13 +63,13 @@ class DebugPanelMiddleware(debug_toolbar.middleware.DebugToolbarMiddleware):
         if toolbar:
             # for django-debug-toolbar >= 1.4
             for panel in reversed(toolbar.enabled_panels):
+                if hasattr(panel, 'disable_instrumentation'):
+                    panel.disable_instrumentation()
                 if hasattr(panel, 'generate_stats'):
                     panel.generate_stats(request, response)
-
             cache_key = "%f" % time.time()
             cache.set(cache_key, toolbar.render_toolbar())
 
             response['X-debug-data-url'] = request.build_absolute_uri(
                 reverse('debug_data', urlconf=debug_panel.urls, kwargs={'cache_key': cache_key}))
-
         return response

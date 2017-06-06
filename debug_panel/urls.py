@@ -11,8 +11,10 @@ try:
 except ImportError:  # django < 1.4
     from django.conf.urls.defaults import url
 
+from django.conf.urls.i18n import i18n_patterns
+
 _PREFIX = '__debug__'
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     url(r'^%s/data/(?P<cache_key>\d+\.\d+)/$' % _PREFIX, debug_data, name='debug_data'),
-]
+)
